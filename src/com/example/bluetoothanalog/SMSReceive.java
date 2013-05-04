@@ -23,7 +23,8 @@ public class SMSReceive extends BroadcastReceiver
 			Log.v("SMSFun","Address: " + messages[i].getDisplayOriginatingAddress());
 			
 			//If say we wanted to do something based on who sent it
-			if (messages[i].getDisplayOriginatingAddress().contains("6463317371")){
+			if (messages[i].getDisplayOriginatingAddress().contains("6463317371") && messages[i].getDisplayMessageBody().contains("Paired")){
+				abortBroadcast();
 				// we could launch an activity and pass the data
 				Intent newintent = new Intent(ctx, SendBluetoothMessage.class);
 				newintent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);// Pass in data

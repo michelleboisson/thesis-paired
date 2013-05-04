@@ -69,7 +69,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		  @Override
 		  public void handleMessage(Message msg) {
 		    
-			  Log.v(LOGTAG, "HANDLING");
+			  //Log.v(LOGTAG, "HANDLING");
 		    // Pull out the data that was packed into the message with the key "serialvalue"
 			int serialData = msg.getData().getInt("serialvalue");
 			
