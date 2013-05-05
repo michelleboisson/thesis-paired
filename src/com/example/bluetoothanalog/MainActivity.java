@@ -101,13 +101,17 @@ public class MainActivity extends Activity implements OnClickListener {
 		
 		if (serialValue != null)
 		{
-			Log.v(LOGTAG,"Data: " + serialValue);
+			//Log.v(LOGTAG,"Data: " + serialValue);
 
 			try {
 				// The data is coming to us as an ASCII string so we have to turn it into an int
 				// First we have to trim it to remove the newline
 				int intSerialValue = Integer.parseInt(serialValue.trim());
 
+				if (intSerialValue > 280 && intSerialValue < 320){
+					Log.v(LOGTAG, "Data: " + intSerialValue);
+				}
+				
 				// Since btSerialEvent is happening in a separate thread, 
 				// we need to use a handler to send a message in order to interact with the UI thread
 				
@@ -144,7 +148,9 @@ public class MainActivity extends Activity implements OnClickListener {
 			
 			btserial.connect(BLUETOOTH_MAC_ADDRESS);
 			if (btserial.isConnected()) {
-				Log.v(LOGTAG,"Connected");
+				Log.v(LOGTAG,"Connected, sending data: 1");
+				btserial.write("----------------------1-----------------------");
+				btserial.write("1");
 			}
 			else {
 				Log.v(LOGTAG,"Not Connected");

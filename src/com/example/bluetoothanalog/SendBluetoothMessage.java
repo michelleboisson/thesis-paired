@@ -34,24 +34,31 @@ public class SendBluetoothMessage extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		
 		Log.v(LOGTAG,"Got SMS");
-		
+		//btserial.connect(BLUETOOTH_MAC_ADDRESS);
+		  
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		//setContentView(R.layout.activity_main);
 		
-		connectButton = (Button) this.findViewById(R.id.connectButton);
+		//connectButton = (Button) this.findViewById(R.id.connectButton);
 		//connectButton.setOnClickListener(this);
 		
 		// Setup the custom view
-		myDrawingView = (MyDrawingView) this.findViewById(R.id.myDrawingView);
+		//myDrawingView = (MyDrawingView) this.findViewById(R.id.myDrawingView);
 		
 		btserial = new BtSerial(this);
 		
-		btserial.connect(BLUETOOTH_MAC_ADDRESS);
+		//btserial.connect(BLUETOOTH_MAC_ADDRESS);
 		if (btserial.isConnected()) {
 			Log.v(LOGTAG,"Connected");
+			btserial.write("G");
 		}
 		else {
-			Log.v(LOGTAG,"Not Connected");
+			Log.v(LOGTAG,"Not Connected, connecting");
+			btserial.connect(BLUETOOTH_MAC_ADDRESS);
+			if (btserial.isConnected()) {
+				Log.v(LOGTAG,"Connected");
+				btserial.write("G");
+			}
 		}
 		
 	}
@@ -81,7 +88,8 @@ public class SendBluetoothMessage extends Activity {
 		  @Override
 		  public void handleMessage(Message msg) {
 		    
-			  Log.v(LOGTAG, "HANDLING");
+			  //Log.v(LOGTAG, "HANDLING");
+			  
 		    // Pull out the data that was packed into the message with the key "serialvalue"
 			int serialData = msg.getData().getInt("serialvalue");
 			
