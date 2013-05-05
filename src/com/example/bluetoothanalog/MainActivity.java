@@ -108,9 +108,9 @@ public class MainActivity extends Activity implements OnClickListener {
 				// First we have to trim it to remove the newline
 				int intSerialValue = Integer.parseInt(serialValue.trim());
 
-				if (intSerialValue > 280 && intSerialValue < 320){
+				//if (intSerialValue > 280 && intSerialValue < 320){
 					Log.v(LOGTAG, "Data: " + intSerialValue);
-				}
+				//}
 				
 				// Since btSerialEvent is happening in a separate thread, 
 				// we need to use a handler to send a message in order to interact with the UI thread
@@ -147,6 +147,7 @@ public class MainActivity extends Activity implements OnClickListener {
 			}
 			
 			btserial.connect(BLUETOOTH_MAC_ADDRESS);
+			//just testing to see if I can send bt data off the bat..... so far not successful
 			if (btserial.isConnected()) {
 				Log.v(LOGTAG,"Connected, sending data: 1");
 				btserial.write("----------------------1-----------------------");

@@ -50,14 +50,14 @@ public class SendBluetoothMessage extends Activity {
 		//btserial.connect(BLUETOOTH_MAC_ADDRESS);
 		if (btserial.isConnected()) {
 			Log.v(LOGTAG,"Connected");
-			btserial.write("G");
+			btserial.write("1");
 		}
 		else {
 			Log.v(LOGTAG,"Not Connected, connecting");
 			btserial.connect(BLUETOOTH_MAC_ADDRESS);
 			if (btserial.isConnected()) {
 				Log.v(LOGTAG,"Connected");
-				btserial.write("G");
+				btserial.write("1");
 			}
 		}
 		
@@ -92,22 +92,7 @@ public class SendBluetoothMessage extends Activity {
 			  
 		    // Pull out the data that was packed into the message with the key "serialvalue"
 			int serialData = msg.getData().getInt("serialvalue");
-			
-		/*	if (serialData > 300 && isSqueezed == false) {
-				// Send SMS
-				isSqueezed = true;
-				Log.v(LOGTAG,"SQUEEZING!");
-				//btserial.disconnect();
-				SmsManager sms = SmsManager.getDefault();
-				sms.sendTextMessage("1-646-331-7371", null, "You just received a message from Paired!", null, null); 
-			}
-			else if (serialData > 300 && isSqueezed == true ){
-				isSqueezed = true;
-			}
-			else if (serialData < 300){
-				isSqueezed = false;
-			}
-		*/	
+		
 			// Send it over to the custom view
 			myDrawingView.setYoverTime(serialData);
 		  }
