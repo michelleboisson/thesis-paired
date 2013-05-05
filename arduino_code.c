@@ -14,7 +14,7 @@ SoftwareSerial bluetooth(bluetoothTx, bluetoothRx);
 void setup()
 {
   Serial.begin(9600);  // Begin the serial monitor at 9600bps
-  pinMode(13, OUTPUT);
+  pinMode(digitalLED, OUTPUT);
 
   bluetooth.begin(115200);  // The Bluetooth Mate defaults to 115200bps
   bluetooth.print("$$$");  // Enter command mode
@@ -38,7 +38,7 @@ void loop()
      if (dataFromBT == '1') {
       Serial.println("-------------GOT IT------------------");
       // Turn on LEFD
-      digitalWrite(13, HIGH);
+      digitalWrite(digitalLED, HIGH);
     }
   }
 // if (dataFromBT == '0') {
