@@ -9,14 +9,12 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.app.Activity;
+import android.content.Intent;
 import cc.arduino.btserial.BtSerial;
 
 public class MainActivity extends Activity implements OnClickListener {
 
 	public static final String LOGTAG = "BlueToothAnalog";
-	
-	public static final String BLUETOOTH_MAC_ADDRESS = "00:06:66:4D:65:2C"; //bluetooth mate 
-	//public static final String BLUETOOTH_MAC_ADDRESS = "00:06:66:4E:DE:F8"; //bluetooth smirf
 	
 	public static final int DELIMITER = 10;  // Newline in ASCII
 	
@@ -24,6 +22,20 @@ public class MainActivity extends Activity implements OnClickListener {
 	public static boolean isSqueezed = false;
 	
 	BtSerial btserial;
+	
+	
+	//// FOR MY PHONE	
+	public static String otherphonenum = "347-596-4603";
+	public static String myphonenum = "646-331-7371";
+	public static final String BLUETOOTH_MAC_ADDRESS = "00:06:66:4D:65:2C"; //bluetooth mate 
+	
+	//// FOR BORROWED PHONE
+	//public static String otherphonenum = "646-331-7371";
+	//public static String myphonenum = "347-596-4603";
+	//public static final String BLUETOOTH_MAC_ADDRESS = "00:06:66:4E:DE:F8"; //bluetooth smirf
+	
+	
+	
 	
 	// Declare the custom view
 	MyDrawingView myDrawingView;
@@ -42,6 +54,8 @@ public class MainActivity extends Activity implements OnClickListener {
 		myDrawingView = (MyDrawingView) this.findViewById(R.id.myDrawingView);
 		
 		btserial = new BtSerial(this);
+		btserial.connect(BLUETOOTH_MAC_ADDRESS);
+
 	}
 	
 	@Override
@@ -73,13 +87,15 @@ public class MainActivity extends Activity implements OnClickListener {
 		    // Pull out the data that was packed into the message with the key "serialvalue"
 			int serialData = msg.getData().getInt("serialvalue");
 			
-			if (serialData > 300 && isSqueezed == false) {
+			if (serialData == 1 && isSqueezed == false) {
+			//if (serialData > 300 && isSqueezed == false) {
 				// Send SMS
 				isSqueezed = true;
 				Log.v(LOGTAG,"SQUEEZING!");
 				//btserial.disconnect();
 				SmsManager sms = SmsManager.getDefault();
-				sms.sendTextMessage("1-646-331-7371", null, "You just received a message from Paired!", null, null); 
+				sms.sendTextMessage("646-331-7371", null, "You just received a message from Paired!", null, null); 
+				isSqueezed = true;
 			}
 			else if (serialData > 300 && isSqueezed == true ){
 				isSqueezed = true;
@@ -108,9 +124,9 @@ public class MainActivity extends Activity implements OnClickListener {
 				// First we have to trim it to remove the newline
 				int intSerialValue = Integer.parseInt(serialValue.trim());
 
-				//if (intSerialValue > 280 && intSerialValue < 320){
+				if (intSerialValue > 280 && intSerialValue < 320){
 					Log.v(LOGTAG, "Data: " + intSerialValue);
-				//}
+				}
 				
 				// Since btSerialEvent is happening in a separate thread, 
 				// we need to use a handler to send a message in order to interact with the UI thread
@@ -138,23 +154,34 @@ public class MainActivity extends Activity implements OnClickListener {
 		}
 	}
 
+	@Override 
+	protected void onNewIntent(Intent intent) {
+		Log.v(LOGTAG, "Got SMS");
+		if (btserial.isConnected()) {
+			Log.v(LOGTAG,"Connected");
+			btserial.write("----------------------1-----------------------");
+			btserial.write("1");
+		}
+		else {
+			Log.v(LOGTAG,"Not Connected, connecting");
+			btserial.connect(BLUETOOTH_MAC_ADDRESS);
+			if (btserial.isConnected()) {
+				Log.v(LOGTAG,"Connected");
+				btserial.write("1");
+			}
+		}
+		
+	}
+	
 	@Override
 	public void onClick(View clickedView) {
 		if (clickedView == connectButton) {
 			if (btserial.isConnected()) {
-				Log.v(LOGTAG, "Already Connected, Disconnecting");
-				btserial.disconnect();
-			}
-			
-			btserial.connect(BLUETOOTH_MAC_ADDRESS);
-			//just testing to see if I can send bt data off the bat..... so far not successful
-			if (btserial.isConnected()) {
 				Log.v(LOGTAG,"Connected, sending data: 1");
 				btserial.write("----------------------1-----------------------");
 				btserial.write("1");
-			}
-			else {
-				Log.v(LOGTAG,"Not Connected");
+			} else {
+				btserial.connect(BLUETOOTH_MAC_ADDRESS);
 			}
 		}
 	}

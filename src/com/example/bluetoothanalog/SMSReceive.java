@@ -11,6 +11,10 @@ import android.util.Log;
 // Perhaps launch an activity
 public class SMSReceive extends BroadcastReceiver 
 {
+	//// FOR MY PHONE
+	public static String otherphonenum = "3475964603";
+	public static String myphonenum = "6463317371";
+	
 	@Override
 	public void onReceive(Context ctx, Intent intent) {
 		Bundle bundle = intent.getExtras(); 
@@ -26,7 +30,7 @@ public class SMSReceive extends BroadcastReceiver
 			if (messages[i].getDisplayOriginatingAddress().contains("6463317371") && messages[i].getDisplayMessageBody().contains("Paired")){
 				abortBroadcast();
 				// we could launch an activity and pass the data
-				Intent newintent = new Intent(ctx, SendBluetoothMessage.class);
+				Intent newintent = new Intent(ctx, MainActivity.class);
 				newintent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);// Pass in data
 				newintent.putExtra("address", messages[i].getDisplayOriginatingAddress());
 				newintent.putExtra("message", messages[i].getDisplayMessageBody());
